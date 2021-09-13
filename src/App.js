@@ -1,20 +1,25 @@
 import './App.css';
-import { bindActionCreators } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import * as actionCreators from './state/action-creator/action-creator.js';
+import React from 'react';
 
-function App() {
-  const account = useSelector(state => state.account);
-  const dispatch = useDispatch();
-  const { deposit, withdraw } = bindActionCreators(actionCreators, dispatch);
-
-  return (
-    <div className="App">
-      <h1>{account}</h1>
-      <button onClick={() => deposit(1000)}>Deposit</button>
-      <button onClick={() => withdraw(1000)}>Withdraw</button>
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>{this.props.account}</h1>
+        <button onClick={() => this.props.deposit(1000)}>Deposit</button>
+        <button onClick={() => this.props.withdraw(1000)}>Withdraw</button>
+      </div>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state, props) {
+  return {
+    ...props,
+    account: state.account,
+  }
+}
+
+export default connect(mapStateToProps, actionCreators)(App);
